@@ -3,133 +3,123 @@
 
 **Automating Facebook and Instagram publishing with n8n, Google Sheets, Meta Graph API, and Cloudinary.**
 
-Developed and maintained at **Pexdel Solution** to automate recurring social media publishing tasks and coordinate content delivery across client accounts.
+Developed and maintained at **Pexdel Solution**, this project automates recurring social media publishing tasks across multiple client accounts.
 
 ## Project Overview
 
-Managing social media publishing across multiple client accounts involves repetitive tasks, including preparing content, handling images, checking publishing schedules, and publishing posts on the correct platforms.
+Managing social media for multiple clients involves coordinating content, captions, images, publishing schedules, and account-specific settings. This project uses n8n to connect these tasks into a centralized automation workflow.
 
-This project uses **n8n workflow automation** to connect client data, scheduling logic, media processing, and social media APIs into a centralized workflow.
-
-The automation retrieves client records from Google Sheets, evaluates posting conditions, and routes eligible records through Facebook and Instagram publishing workflows.
+The workflow retrieves client records from Google Sheets, evaluates posting conditions, and routes eligible records into Facebook and Instagram publishing branches.
 
 ## Key Features
 
-- **Scheduled Automation:** Starts the workflow according to a configured schedule.
-- **Centralized Client Data:** Uses Google Sheets to manage client information, captions, posting conditions, and account details.
-- **Conditional Routing:** Evaluates posting-day conditions before processing client records.
-- **Facebook Publishing:** Sends images and captions through the Meta Graph API.
-- **Instagram Publishing:** Downloads media, uploads assets to Cloudinary, creates Instagram media containers, checks processing status, and publishes eligible posts.
-- **Workflow Coordination:** Uses loops, conditional branches, and delays to manage publishing sequences.
-- **Publishing Status Updates:** Updates Google Sheets as records move through the workflow.
+- **Scheduled execution:** Starts publishing workflows on a configured schedule.
+- **Centralized configuration:** Reads client details, captions, account IDs, and posting conditions from Google Sheets.
+- **Conditional routing:** Evaluates posting conditions before processing records.
+- **Facebook publishing:** Sends image posts and captions through the Meta Graph API.
+- **Instagram publishing:** Downloads images, uploads media to Cloudinary, creates media containers, checks processing status, and publishes posts.
+- **Workflow coordination:** Uses loops, conditions, delays, and HTTP requests to coordinate publishing steps.
+- **Spreadsheet updates:** Updates Google Sheets at designated points in the workflow.
 
 ## Technology Stack
 
 | Technology | Purpose |
 |---|---|
-| n8n | Workflow orchestration and automation |
+| n8n | Workflow orchestration |
 | Google Sheets | Client data and publishing configuration |
-| Meta Graph API | Facebook and Instagram publishing |
-| Cloudinary | Image hosting and media processing |
-| JavaScript | Data transformation and workflow expressions |
-| HTTP Request | Communication with external APIs |
+| Meta Graph API | Social media publishing |
+| Cloudinary | Image hosting |
+| JavaScript | Data transformation and expressions |
+| HTTP Request | API integration |
 
-## System Architecture
+## Workflow Architecture
 
 ```text
-              Scheduled Trigger
-                     |
-                     v
-            Google Sheets Data
-                     |
-                     v
-          Posting-Day Conditions
-                     |
-              +------+------+
-              |             |
-              v             v
-         Facebook        Instagram
-         Workflow         Workflow
-              |             |
-              v             v
-        Prepare Image   Download Image
-        and Caption          |
-              |              v
-              |         Cloudinary Upload
-              |              |
-              |              v
-              |       Create Media Container
-              |              |
-              |              v
-              |       Check Processing Status
-              |              |
-              v              v
-         Meta Graph API Publishing
-              |             |
-              v             v
-        Facebook Post   Instagram Post
-                            |
-                            v
-                    Google Sheets Update
+Schedule Trigger
+       |
+       v
+Google Sheets: Read Client Data
+       |
+       v
+Posting-Day Condition
+       |
+       +-------------------+
+       |                   |
+       v                   v
+Facebook Workflow    Instagram Workflow
+       |                   |
+Prepare Image         Download Image
+and Caption                |
+       |                   v
+       |             Cloudinary Upload
+       |                   |
+       |                   v
+       |             Create Media Container
+       |                   |
+       |                   v
+       |             Check Processing Status
+       |                   |
+       v                   v
+Meta Graph API       Meta Graph API
+       |                   |
+       v                   v
+Facebook Post        Instagram Post
+                           |
+                           v
+                   Google Sheets Update
 ```
 
-*This diagram summarizes the main workflow. Refer to the project screenshots for the actual n8n implementation.*
+*This is a high-level illustration; see the screenshots below for the actual n8n workflow.*
 
-## How It Works
+## Workflow Screenshots
 
-### 1. Scheduled Execution
+### 1. Workflow Overview
 
-The Schedule Trigger starts the workflow according to its configured schedule.
+The Schedule Trigger starts the automation, which retrieves client records and routes them according to the configured conditions.
 
-### 2. Client Data Retrieval
+![Workflow Overview](n8n.png)
 
-The workflow reads client records from Google Sheets, including captions, account identifiers, access tokens, and posting conditions.
+### 2. Facebook Posting Workflow
 
-### 3. Conditional Processing
+Shows the Facebook publishing branch, including image-link conversion, field mapping, and the API request.
 
-The workflow evaluates the configured posting-day condition and routes eligible records into the appropriate publishing branches.
+![Facebook Posting Workflow](Facebook%20posting%20workflow.png)
 
-### 4. Facebook Publishing
+### 3. Instagram Posting Workflow
 
-The Facebook branch prepares the image URL, page identifier, caption, and access token, then sends an HTTP request to the Meta Graph API to publish the image post.
+Shows the Instagram publishing process, including media preparation, Cloudinary upload, container creation, processing checks, and publishing.
 
-### 5. Instagram Publishing
+![Instagram Posting Workflow](instagram%20posting%20workflow.png)
 
-The Instagram branch downloads the image, uploads it to Cloudinary, creates a media container, waits for processing, checks the media status, and proceeds to publishing when the required status is reached.
+### 4. Combined Facebook and Instagram Workflow
 
-### 6. Spreadsheet Updates
+Shows the overall workflow layout and how the publishing branches connect to the main automation.
 
-Google Sheets is updated at designated points in the workflow to reflect processing outcomes and manage subsequent automation behavior.
+![Combined Facebook and Instagram Workflow](fb_insta_workflow.png)
 
-## Engineering Focus
+## Engineering Work
 
-This project demonstrates practical experience with:
+My work at Pexdel Solution includes:
 
-- Designing multi-branch automation workflows.
-- Integrating third-party APIs through HTTP requests.
-- Mapping and transforming structured data between nodes.
-- Managing client-specific configuration through a centralized spreadsheet.
-- Coordinating asynchronous media-processing operations.
-- Working with Meta API permissions and access-token configuration.
-- Troubleshooting workflow execution and publishing issues.
+- Developing and maintaining n8n automation workflows.
+- Integrating external APIs using HTTP requests.
+- Mapping structured data between workflow nodes.
+- Managing client-specific publishing configuration through Google Sheets.
+- Coordinating asynchronous Instagram media processing.
+- Troubleshooting publishing failures and Meta API access configuration.
 
 ## Security and Privacy
 
-This public repository documents the project through sanitized screenshots and technical explanations.
+This repository documents the project using workflow screenshots and technical explanations.
 
-- Production workflow exports and credentials are not included.
-- Access tokens, app secrets, and private client data must remain confidential.
-- API credentials should be managed securely within n8n.
-- Publishing requires appropriate Meta permissions and access to the relevant Pages and Instagram accounts.
+- Production credentials and access tokens are not included.
+- Private client information should remain confidential.
+- Live publishing requires appropriate Meta permissions and access to the relevant accounts.
 
-## Professional Context
+## Project Information
 
-**Organization:** Pexdel Solution  
-**Project:** Social Media Publishing Automation  
-**Primary Role:** Workflow development, maintenance, and troubleshooting
+- **Organization:** Pexdel Solution
+- **Project:** Social Media Publishing Automation
+- **Focus:** Workflow automation, API integration, publishing operations, and troubleshooting
 
-The project reflects hands-on experience building and maintaining business automation that connects client data, media processing, and social media publishing APIs.
-
----
-
-**Note:** Screenshots are intended to document the workflow architecture and implementation. They do not expose production credentials or private client information.
+This project demonstrates practical experience connecting business data, media processing, and social media APIs through a multi-branch automation workflow.
